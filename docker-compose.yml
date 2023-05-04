@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
+  restaurant-service:
+    build: ./restaurantService
+    ports:
+      - '3005:3005'
+    depends_on:
+      - rabbitmq
+
+  dough-chef-service:
+    build: ./doughChefService
+    ports:
+      - '3001:3001'
+    depends_on:
+      - rabbitmq
+
+  topping-chef-service:
+    build: ./toppingChefService
+    ports:
+      - '3002:3002'
+    depends_on:
+      - rabbitmq
+
+  oven-service:
+    build: ./ovenService
+    ports:
+      - '3003:3003'
+    depends_on:
+      - rabbitmq
+
+  waiter-service:
+    build: ./waiterService
+    ports:
+      - '3004:3004'
+    depends_on:
+      - rabbitmq
