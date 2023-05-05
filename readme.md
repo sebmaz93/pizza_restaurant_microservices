@@ -3,12 +3,17 @@
 This project demonstrates a microservices-based architecture for a pizza restaurant that uses RabbitMQ for communication between the services.
 ## Architecture
 
-The application consists of the following microservices:
+The application consists of the following (8) microservices:
 
+- Restaurant Service (main)
 - 2 Dough Chef Services
 - 3 Topping Chef Services
 - Oven Service
 - 2 Waiter Services
+- Reporter Service
+- RabbitMQ (docker image)
+- MongoDB (docker image)
+
 
 These microservices communicate with each other through a RabbitMQ message broker.
 
@@ -31,9 +36,10 @@ Build the Docker images for each service using this command:
 
 The app will run and you send orders by using HTTP request you can use postman or curl using this url: `http://localhost:3005/order` 
 
-example:
-
 #### postman
+method : post
+
+body: raw (json)
 ```json
 [
     {
@@ -65,10 +71,8 @@ example:
 
 #### terminal
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{
-    "id": "123",
-    "toppings": ["cheese", "pepperoni", "mushrooms"]
-}' "http://localhost:3005/order"
+curl -X POST -H "Content-Type: application/json" -d 
+'{{YOUR DATA}}' "http://localhost:3005/order"
 ```
 
 ## Monitoring
