@@ -53,3 +53,10 @@ services:
 #      - '3004:3004'
     depends_on:
       - rabbitmq
+
+  reporter-service:
+    build: ./reporterService
+    #    ports:
+    #      - '3006:3006'
+    depends_on:
+      - rabbitmq
