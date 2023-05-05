@@ -1,5 +1,6 @@
 export interface Pizza {
   id: string;
+  groupId: string;
   toppings: string[];
   doughReady: boolean;
   toppingsReady: boolean;

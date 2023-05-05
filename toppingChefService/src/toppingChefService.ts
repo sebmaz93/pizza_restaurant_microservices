@@ -12,9 +12,14 @@ async function toppingChefService() {
 
     await consumeFromQueue(connection, "toppingQueue", async (pizza: Pizza) => {
       logWithTime(`--Pizza with ID :${pizza.id} Topping started`);
-      for (const topping of pizza.toppings) {
-        await new Promise((resolve) => setTimeout(resolve, 4000));
+
+      // Process toppings two at a time
+      for (let i = 0; i < pizza.toppings.length; i += 2) {
+        const toppingsChunk = pizza.toppings.slice(i, i + 2);
+
+        await Promise.all(toppingsChunk.map(() => handleTopping()));
       }
+
       pizza.toppingsReady = true;
       logWithTime(`--Pizza with ID :${pizza.id} Topping finished`);
       await sendToQueue(connection, "ovenQueue", pizza);
@@ -22,6 +27,14 @@ async function toppingChefService() {
   } catch (err) {
     console.error("Topping Service error", err);
   }
+}
+
+function handleTopping(): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 4000);
+  });
 }
 
 toppingChefService();

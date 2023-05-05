@@ -13,9 +13,11 @@ let connection: Connection;
 app.post("/order", async (req, res) => {
   try {
     const orders: Pizza[] = req.body;
+    const ordersGroupId = generateId();
     if (connection) {
       for (const order of orders) {
         order.id = generateId();
+        order.groupId = ordersGroupId;
         order.receivedAt = Date.now();
         await sendToQueue(connection, "doughQueue", order);
       }
