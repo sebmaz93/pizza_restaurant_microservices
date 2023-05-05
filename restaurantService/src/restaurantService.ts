@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { Connection } from "amqplib";
-import { Pizza, defaultOrders } from "./models";
+import { Pizza } from "./models";
 import { connectRabbitMQ, sendToQueue } from "./util/rabbitmq";
 import { generateId } from "./util/id";
 
@@ -32,10 +32,6 @@ app.post("/order", async (req, res) => {
 async function restaurantService() {
   try {
     connection = await connectRabbitMQ();
-
-    for (const order of defaultOrders) {
-      await sendToQueue(connection, "doughQueue", order);
-    }
 
     const port = process.env.PORT || 3005;
     app.listen(port, () => console.log(`Server is running on port ${port}`));

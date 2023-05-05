@@ -14,7 +14,7 @@ async function reporterService() {
         if (pizza.receivedAt && pizza.servedAt) {
           const preparationTime = pizza.servedAt - pizza.receivedAt;
           console.log(
-            `Order ${pizza.id} was prepared in ${
+            `Pizza with ID : ${pizza.id} was prepared in ${
               preparationTime / 1000
             } seconds.`
           );
@@ -24,7 +24,7 @@ async function reporterService() {
       }
     );
   } catch (err) {
-    console.log("Reporter Service error", err);
+    console.error("Reporter Service error", err);
   }
 }
 

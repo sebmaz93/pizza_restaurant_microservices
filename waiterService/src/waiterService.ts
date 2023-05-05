@@ -4,21 +4,22 @@ import {
   sendToQueue,
   consumeFromQueue,
 } from "./util/rabbitmq";
+import { logWithTime } from "./util/logging";
 
 async function waiterService() {
   try {
     const connection = await connectRabbitMQ();
 
     await consumeFromQueue(connection, "waiterQueue", async (pizza: Pizza) => {
-      console.log(`Pizza with ID :${pizza.id} serving started`);
+      logWithTime(`--Pizza with ID :${pizza.id} serving started`);
       await new Promise((resolve) => setTimeout(resolve, 5000));
       pizza.servedAt = Date.now();
       pizza.served = true;
-      console.log(`Pizza with ID :${pizza.id} serving finished`);
+      logWithTime(`--Pizza with ID :${pizza.id} serving finished`);
       await sendToQueue(connection, "reporterQueue", pizza);
     });
   } catch (err) {
-    console.log("Waiter Service error", err);
+    console.error("Waiter Service error", err);
   }
 }
 

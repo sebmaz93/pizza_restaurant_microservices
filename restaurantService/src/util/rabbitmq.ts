@@ -1,8 +1,8 @@
 import * as amqp from "amqplib";
 
 export async function connectRabbitMQ(
-  attempts: number = 5,
-  delayMs: number = 3000
+  attempts: number = 10,
+  delayMs: number = 2000
 ): Promise<amqp.Connection> {
   for (let i = 0; i < attempts; i++) {
     try {
