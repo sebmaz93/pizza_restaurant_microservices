@@ -1,16 +1,24 @@
-import { Pizza } from './models';
-import { connectRabbitMQ, sendToQueue, consumeFromQueue } from './util/rabbitmq';
+import { Pizza } from "./models";
+import {
+  connectRabbitMQ,
+  sendToQueue,
+  consumeFromQueue,
+} from "./util/rabbitmq";
 
-(async () => {
-    try {
-        const connection = await connectRabbitMQ();
+async function doughChefService() {
+  try {
+    const connection = await connectRabbitMQ();
 
-        await consumeFromQueue(connection, 'doughQueue', async (pizza: Pizza) => {
-            await new Promise(resolve => setTimeout(resolve, 7000));
-            console.log(`Dough prepared for pizza with ${pizza.toppings}`);
-            await sendToQueue(connection, 'toppingQueue', pizza);
-        });
-    } catch (err) {
-        console.log('Dough service error', err)
-    }
-})();
+    await consumeFromQueue(connection, "doughQueue", async (pizza: Pizza) => {
+      console.log(`Pizza with ID :${pizza.id} Dough started`);
+      await new Promise((resolve) => setTimeout(resolve, 7000));
+      pizza.doughReady = true;
+      console.log(`Pizza with ID :${pizza.id} Dough finished`);
+      await sendToQueue(connection, "toppingQueue", pizza);
+    });
+  } catch (err) {
+    console.log("Dough service error", err);
+  }
+}
+
+doughChefService();

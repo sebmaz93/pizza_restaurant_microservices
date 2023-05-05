@@ -1,19 +1,47 @@
-import { Pizza } from './models';
-import { connectRabbitMQ, sendToQueue, consumeFromQueue } from './util/rabbitmq';
+import express from "express";
+import bodyParser from "body-parser";
+import { Connection } from "amqplib";
+import { Pizza, defaultOrders } from "./models";
+import { connectRabbitMQ, sendToQueue } from "./util/rabbitmq";
+import { generateId } from "./util/id";
 
-const orders: Pizza[] = [
-    new Pizza(['pepperoni', 'mushrooms']),
-    new Pizza(['ham', 'pineapple']),
-    new Pizza(['sausage', 'onions', 'green peppers']),
-];
+const app = express();
+app.use(bodyParser.json());
 
-(async () => {
-    try {
-        const connection = await connectRabbitMQ();
-        for (const order of orders) {
-            await sendToQueue(connection, 'doughQueue', order);
-        }
-    } catch (err) {
-        console.log('eer', err)
+let connection: Connection;
+
+app.post("/order", async (req, res) => {
+  try {
+    const orders: Pizza[] = req.body;
+    if (connection) {
+      for (const order of orders) {
+        order.id = generateId();
+        order.receivedAt = Date.now();
+        await sendToQueue(connection, "doughQueue", order);
+      }
+      res.status(200).send({ message: "Order/s received." });
+    } else {
+      res.status(500).send({ error: "Service unavailable." });
     }
-})();
+  } catch (err) {
+    console.error(`Error processing order: ${err}`);
+    res.status(500).send({ error: "Failed to process order." });
+  }
+});
+
+async function restaurantService() {
+  try {
+    connection = await connectRabbitMQ();
+
+    for (const order of defaultOrders) {
+      await sendToQueue(connection, "doughQueue", order);
+    }
+
+    const port = process.env.PORT || 3005;
+    app.listen(port, () => console.log(`Server is running on port ${port}`));
+  } catch (err) {
+    console.error(`Failed to connect to RabbitMQ: ${err}`);
+  }
+}
+
+restaurantService();
