@@ -43,7 +43,6 @@ body: raw (json)
 ```json
 [
     {
-        "id": "123",
         "toppings": ["ham", "pineapple", "cheese", "olives", "corn"],
         "doughReady": false,
         "toppingsReady": false,
@@ -51,7 +50,6 @@ body: raw (json)
         "served": false
     },
     {
-        "id": "123415",
         "toppings": ["cheese", "olives", "corn"],
         "doughReady": false,
         "toppingsReady": false,
@@ -59,7 +57,6 @@ body: raw (json)
         "served": false
     },
     {
-        "id": "2351231",
         "toppings": ["ham", "corn"],
         "doughReady": false,
         "toppingsReady": false,

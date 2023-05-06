@@ -1,11 +1,6 @@
 import { Pizza } from "./models";
 import { connectRabbitMQ, consumeFromQueue } from "./util/rabbitmq";
-import {
-  initializeDatabase,
-  findOrder,
-  updateOrder,
-  insertOrder,
-} from "./database";
+import { initializeDatabase, updateOrder, insertOrder } from "./database";
 
 async function reporterService() {
   try {
