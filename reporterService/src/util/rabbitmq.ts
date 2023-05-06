@@ -36,7 +36,6 @@ export async function consumeFromQueue(
 ): Promise<void> {
   const channel = await connection.createChannel();
   await channel.assertQueue(queueName);
-  await channel.prefetch(1);
   await channel.consume(queueName, async (msg) => {
     if (msg) {
       const data = JSON.parse(msg.content.toString());

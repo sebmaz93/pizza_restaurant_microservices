@@ -12,11 +12,12 @@ async function reporterService() {
     const connection = await connectRabbitMQ();
     await initializeDatabase();
 
+    // set up the orders group in db and store the received time
     await consumeFromQueue(
       connection,
       "reporterInitQueue",
-      async ({ groupId, receivedAt }) => {
-        await insertOrder(groupId, receivedAt);
+      async ({ ordersGroupId, receivedAt }) => {
+        await insertOrder(ordersGroupId, receivedAt);
       }
     );
 
