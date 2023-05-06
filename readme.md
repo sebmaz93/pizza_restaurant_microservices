@@ -42,27 +42,31 @@ method : post
 body: raw (json)
 ```json
 [
-    {
-        "toppings": ["ham", "pineapple", "cheese", "olives", "corn"],
-        "doughReady": false,
-        "toppingsReady": false,
-        "cooked": false,
-        "served": false
-    },
-    {
-        "toppings": ["cheese", "olives", "corn"],
-        "doughReady": false,
-        "toppingsReady": false,
-        "cooked": false,
-        "served": false
-    },
-    {
-        "toppings": ["ham", "corn"],
-        "doughReady": false,
-        "toppingsReady": false,
-        "cooked": false,
-        "served": false
-    }
+  {
+    "toppings": [
+      "ham",
+      "pineapple",
+      "cheese",
+      "olives",
+      "corn"
+    ]
+  },
+  {
+    "toppings": [
+      "cheese",
+      "olives",
+      "corn",
+      "extra cheese",
+      "pineapple",
+      "sausage"
+    ]
+  },
+  {
+    "toppings": [
+      "ham",
+      "corn"
+    ]
+  }
 ]
 ```
 

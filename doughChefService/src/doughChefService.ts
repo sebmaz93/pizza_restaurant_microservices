@@ -12,6 +12,7 @@ async function doughChefService() {
 
     await consumeFromQueue(connection, "doughQueue", async (pizza: Pizza) => {
       logWithTime(`--Pizza with ID :${pizza.id} Dough started`);
+      pizza.receivedAt = Date.now();
       await new Promise((resolve) => setTimeout(resolve, 7000));
       pizza.doughReady = true;
       logWithTime(`--Pizza with ID :${pizza.id} Dough finished`);
@@ -21,5 +22,4 @@ async function doughChefService() {
     console.error("Dough service error", err);
   }
 }
-
 doughChefService();

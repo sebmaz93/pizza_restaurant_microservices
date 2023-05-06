@@ -23,7 +23,6 @@ app.post("/order", async (req, res) => {
       for (const order of orders) {
         order.id = generateId();
         order.groupId = ordersGroupId;
-        order.receivedAt = Date.now();
         await sendToQueue(connection, "doughQueue", order);
       }
       res.status(200).send({
