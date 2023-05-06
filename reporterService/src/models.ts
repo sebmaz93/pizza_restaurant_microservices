@@ -8,4 +8,13 @@ export interface Pizza {
   served: boolean;
   receivedAt?: number;
   servedAt?: number;
+  duration?: number;
+}
+
+export interface Order {
+  _id: string;
+  pizzas: Pizza[];
+  receivedAt: number;
+  finishedAt?: number;
+  duration?: number;
 }

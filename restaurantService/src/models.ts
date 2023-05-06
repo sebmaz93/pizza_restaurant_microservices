@@ -8,4 +8,5 @@ export interface Pizza {
   served: boolean;
   receivedAt?: number;
   servedAt?: number;
+  duration?: number;
 }

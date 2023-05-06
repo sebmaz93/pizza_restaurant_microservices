@@ -15,13 +15,20 @@ app.post("/order", async (req, res) => {
     const orders: Pizza[] = req.body;
     const ordersGroupId = generateId();
     if (connection) {
+      await sendToQueue(connection, "reporterInitQueue", {
+        ordersGroupId,
+        receivedAt: Date.now(),
+      });
+
       for (const order of orders) {
         order.id = generateId();
         order.groupId = ordersGroupId;
         order.receivedAt = Date.now();
         await sendToQueue(connection, "doughQueue", order);
       }
-      res.status(200).send({ message: "Order/s received." });
+      res.status(200).send({
+        message: `Order received, your order ID is : ${ordersGroupId}`,
+      });
     } else {
       res.status(500).send({ error: "Service unavailable." });
     }

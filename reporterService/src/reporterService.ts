@@ -1,6 +1,11 @@
 import { Pizza } from "./models";
 import { connectRabbitMQ, consumeFromQueue } from "./util/rabbitmq";
-import { initializeDatabase, insertOrder } from "./database";
+import {
+  initializeDatabase,
+  findOrder,
+  updateOrder,
+  insertOrder,
+} from "./database";
 
 async function reporterService() {
   try {
@@ -9,17 +14,26 @@ async function reporterService() {
 
     await consumeFromQueue(
       connection,
+      "reporterInitQueue",
+      async ({ groupId, receivedAt }) => {
+        await insertOrder(groupId, receivedAt);
+      }
+    );
+
+    await consumeFromQueue(
+      connection,
       "reporterQueue",
       async (pizza: Pizza) => {
         if (pizza.receivedAt && pizza.servedAt) {
           const preparationTime = pizza.servedAt - pizza.receivedAt;
+          pizza.duration = preparationTime / 1000;
           console.log(
             `Pizza with ID : ${pizza.id} was prepared in ${
               preparationTime / 1000
             } seconds.`
           );
 
-          // await insertOrder(pizza.id, pizza.receivedAt, pizza.servedAt);
+          await updateOrder(pizza.groupId, pizza);
         }
       }
     );

@@ -24,7 +24,7 @@ These microservices communicate with each other through a RabbitMQ message broke
 - Typescript
 - Node
 - RabbitMQ
-- Kubernetes (optional)
+- Kubernetes (optional) : WIP
 - MongoDb (optional)
 
 ## Running the project
@@ -81,3 +81,5 @@ Each service logs its progress as it processes pizza orders. You can monitor the
 
 When using Docker Compose, the logs can be viewed using the `docker-compose logs` command or via docker app dashboard.
 or you can see the logs in your terminal where you ran docker command
+
+to access the DB use `localhost:27017` in GUI app.
